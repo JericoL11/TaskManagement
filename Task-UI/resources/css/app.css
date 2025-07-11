@@ -1,0 +1,15 @@
+  .card {
+        transition: all 0.3s ease-in-out !important;
+    }
+
+    .card:hover {
+        transform: scale(1.03) !important;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    ul li{
+       list-style: none;
+       text-align: center;
+    }
+       
+    
