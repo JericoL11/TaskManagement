@@ -5,7 +5,10 @@
 @section('content')
 
 <div class="d-flex justify-content-end">
-    <button class="btn btn-primary py-2  px-2 "> <i class="bi bi-plus-circle"></i> Add New</button>
+    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary my-2" data-bs-toggle="modal" data-personid='0' data-bs-target="#modifyEmployeeModal">
+ <i class="bi bi-plus-circle"></i> Add New </button>
+
 </div>
 <table id="employers-table" class="table table-hover">
     <thead class="table-primary">
@@ -21,4 +24,4 @@
 @endsection
 
 
-@yield("modal")
+@include('employee.addUpdateModal')

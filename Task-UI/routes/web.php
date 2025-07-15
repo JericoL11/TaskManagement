@@ -27,4 +27,12 @@ Route::resource('department', DepartmentController::class);
 
 
 //specified functions
+
+//employee
 Route::get('getAllEmployers', [EmployeeController::class, 'getAllEmployers']);
+Route::post('save/employee/{id}', [EmployeeController::class, 'saveEmployee']);
+
+//task
+Route::get('getAllTask', [TaskController::class, 'getAllTask']);
+Route::post('save/task/{id}', [TaskController::class, 'saveTask']);
+Route::get('getAllCompletedTask', [TaskController::class, 'getCompletedTaskToday']);
