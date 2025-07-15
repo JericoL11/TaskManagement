@@ -94,7 +94,8 @@ class TaskController extends Controller
         $res = DB::select("CALL sprocDelTask(?)", [$id]);
 
         return response()->json([
-            "response" => $res[0]->message
+            "success" => $res[0]->isSuccess != 0 ? true : false,
+            "message" => $res[0]->message
         ]);
     }
 
@@ -104,7 +105,10 @@ class TaskController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string'],
             'description' => ['required'],
-            'dueDate' => ['required', 'Date']
+            'dueDate' => ['required', 'Date'],
+            'emp_id' => ['required', 'exists:employees,emp_id'],
+            'status' => ['required']
+
         ]);
 
         if($validator->fails()){
@@ -115,11 +119,13 @@ class TaskController extends Controller
         }
 
 
-        $res = DB::select("CALL sprocSaveTask(?,?,?,?)", [
+        $res = DB::select("CALL sprocSaveTask(?,?,?,?,?,?)", [
             $id ?? 0,
             $request->name,
             $request->description,
-            $request->dueDate
+            $request->dueDate,
+            $request->status,
+            $request->emp_id
         ]);
 
         return response()->json([
@@ -127,4 +133,23 @@ class TaskController extends Controller
             'message' => $res[0]->message
         ]);
     }
+
+ public function countCompletedTaskToday()
+{
+    try {
+        $res = DB::select("CALL sprocCountTasksCompletedToday");
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Tasks completed today: ' . $res[0]->completed_today,
+            'count' => $res[0]->completed_today
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage()
+        ], 500); // Return 500 Internal Server Error
+    }
+}
+
 }

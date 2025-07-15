@@ -15,11 +15,16 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */ 
-    public function index()
+    public function index(Request $request )
     {
-        $res = DB::select("CALL sprocEmployees");
+        
+        $searchKey = '%' . $request->searchKey . '%';
 
-      
+        $res = DB::select("CALL sprocEmployees(?)",[
+            $searchKey
+        ]);
+
+    
         return response()->json([
             'success' => true,
             'response' => $res
@@ -96,12 +101,14 @@ class EmployeeController extends Controller
         $res = DB::select("CALL sprocDelEmployee(?)", [$id]);
 
         return response()->json([
-            "response" => $res[0]->message
+            "success" => $res[0]->status != 0 ? true : false,
+            "message" => $res[0]->message
         ]);
     }
 
 
     public function saveEmployee(Request $request, $id){
+
 
       $validator = Validator::make($request->all(), [
                 'firstName' => ['required', 'string'],
@@ -109,7 +116,10 @@ class EmployeeController extends Controller
                 'birthDate' => ['required', 'date'],    
                 'address' => ['required', 'string'],
                 'contactNo' => ['required', 'string'],
-            ]);
+            ],
+        [
+            'contactNo.required' => 'Contact Number field is required'
+        ]);
 
         
         if($validator->fails()){

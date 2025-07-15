@@ -20,10 +20,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+//employeess
 Route::resource('employees', EmployeeController::class);
 Route::post('save/employee/{id}', [EmployeeController::class, 'saveEmployee']);
 
-
+//task
 Route::resource('tasks', TaskController::class);
 Route::post('save/task/{id}', [TaskController::class, 'saveTask']);
+Route::get('completed/task/today', [TaskController::class, 'countCompletedTaskToday']);
+
+
