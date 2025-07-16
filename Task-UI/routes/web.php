@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,7 @@ Route::get('/', function () {
 
 Route::resource('employee', EmployeeController::class);
 Route::resource('task', TaskController::class);
-Route::resource('department', DepartmentController::class);
+Route::resource('report', ReportController::class);
 
 
 //specified functions
@@ -35,4 +36,7 @@ Route::post('save/employee/{id}', [EmployeeController::class, 'saveEmployee']);
 //task
 Route::get('getAllTask', [TaskController::class, 'getAllTask']);
 Route::post('save/task/{id}', [TaskController::class, 'saveTask']);
-Route::get('getAllCompletedTask', [TaskController::class, 'getCompletedTaskToday']);
+
+//report
+Route::get('getAllTaskSummary', [ReportController::class, 'getAllCountTaskSummary']);
+Route::get('getTaskReport', [ReportController::class, 'getAllCompletedTask']);

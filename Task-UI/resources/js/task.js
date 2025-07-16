@@ -1,11 +1,9 @@
 import axios from 'axios';
-import { getDateOnly, setMinToday, setMaxToday} from './dates';
+import { getDateOnly, setMinToday, formatToLongDate, attachLongDateFormatter,resetFormattedDateInput} from './dates';
 
 console.log('task.js');
 
 $(document).ready(function() {
-
-    completedTaskToday();
     initTaskDatatable();
 
     $('.action-btn-task').on('click', function(e) {
@@ -18,7 +16,7 @@ $(document).ready(function() {
       
         const data = {
             'name': $('#name').val(),
-            'dueDate': $('#dueDate').val(),
+            'dueDate': $('#dueDateHidden').val(),
             'description': $('#description').val(),
             'status': $('#status').val(),
             'emp_id': $('#employeeid').val()
@@ -58,10 +56,10 @@ $(document).ready(function() {
             }
             else{
 
-                console.log(data);
+                
                  const errorMsg = Array.isArray(response.data.error)
                 ? response.data.error.join('<br>')
-                : response.data.error || "Uknown error";
+                : response.data.message;
 
                 Swal.fire({
                     title: "Error",
@@ -180,6 +178,7 @@ $('#modifyTaskModal').on('show.bs.modal', function (event) {
     const statusFormGroup = $('.statusFormGroup')
 
 
+
     //Init Select2 only once
     const $select = $('#employeeid');
     if (!$select.hasClass('select2-initialized')) {
@@ -219,15 +218,30 @@ $('#modifyTaskModal').on('show.bs.modal', function (event) {
         $select.val(null).trigger('change');
     }
 
+
+
+    resetFormattedDateInput('#dueDate', '#dueDateHidden');
+
     // Show/hide delete button
     if (task_id === 0) {
         deleteBtn.hide();
         submitBtn.text('Save');
         submitBtn.attr('data-action', `save`);
-        statusElement.val("Pending");
+        statusElement.val("in-progress");
         statusFormGroup.hide();
 
+
+
+    const rawDate = $('#dueDateHidden').val();
+    if (rawDate) {
+        $('#dueDate')
+            .attr('type', 'text')
+            .val(formatToLongDate(rawDate));
+    }
         setMinToday('#dueDate');
+
+        
+        attachLongDateFormatter('#dueDate', '#dueDateHidden')
 
     } else {
         deleteBtn.show();
@@ -236,10 +250,11 @@ $('#modifyTaskModal').on('show.bs.modal', function (event) {
         //mapping
     
         $('#description').val(description);
-        $('#dueDate').val(getDateOnly(dueDate));
+        $('#dueDate').val(dueDate);
         $('#status').val(status);
         $('#name').val(taskName);
 
+        attachLongDateFormatter('#dueDate', '#dueDateHidden') 
         submitBtn.text('Update');
         submitBtn.attr('data-action', 'update');
         submitBtn.attr('data-id', task_id);
@@ -251,10 +266,12 @@ $('#modifyTaskModal').on('show.bs.modal', function (event) {
 $('#modifyTaskModal').on('hidden.bs.modal', function () {
     $('#taskForm')[0].reset();
     const $submitBtn = $('#submit-btn-task');
+    
     // Remove attributes + jQuery cache
     $submitBtn.removeAttr('data-action').removeData('action');
     $submitBtn.removeAttr('data-id').removeData('id');
 
+    $('#dueDateHidden').val('');
 
 });
 
@@ -277,16 +294,8 @@ $('#modifyTaskModal').on('hidden.bs.modal', function () {
             { data: 'full_name' }, 
            {
             data: 'dueDate',
-            render: function (data, type, row) {
-                if (!data) return '';
-
-                const date = new Date(data);
-
-                return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long', // "July"
-                day: 'numeric' // "14"
-                });
+            render: function (data) {
+                return formatToLongDate(data);
             }
             },
             { data: 'status' },
@@ -302,7 +311,7 @@ $('#modifyTaskModal').on('hidden.bs.modal', function () {
                 data-empid="${row.emp_id}"
                 data-name="${row.name}"
                 data-description="${row.description}"
-                data-duedate="${row.dueDate}"
+                data-duedate="${getDateOnly(row.dueDate)}"
                 data-status="${row.status}"
                 data-fullname="${row.full_name}"
                 data-bs-target="#modifyTaskModal"
@@ -318,28 +327,6 @@ $('#modifyTaskModal').on('hidden.bs.modal', function () {
         ]
     });
     }
-
-
-function completedTaskToday() {
-    const $spinner = $('#taskLoader');
-    const $text = $('#taskCountText');
-
-   $spinner.removeClass('d-none');
-    $text.text('');
-
-    axios.get('getAllCompletedTask')
-        .then(response => {
-            $text.text(response.data.count);
-        })
-        .catch(error => {
-            console.error(error);
-            $text.text('Error');
-        })
-        .finally(() => {
-            $spinner.addClass('d-none');
-        });
-}
-
     
 });
 

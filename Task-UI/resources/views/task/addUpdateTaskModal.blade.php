@@ -15,10 +15,11 @@
                             <input type="text" id="name" class="form-control" placeholder="" value=""/>
                         </div>
 
-
                            <div class="col-lg-6 col-md-12 form-group">
                             <label class="control-label">Due Date</label>
                             <input type="date" id="dueDate" class="form-control" placeholder="" value=""/>
+                            <input type="hidden" id="dueDateHidden" class="form-control" placeholder="" value=""/>
+
                         </div>
                     
                          <div class="col-lg-12 col-md-12 form-group">
@@ -30,7 +31,7 @@
                             <label class="control-label">Status</label>
                             <select id="status" class="form-control" style="width:100%">
                                 <option value="" selected> Select Status</option>
-                                <option value="Pending"> Pending</option>
+                                <option value="in-progress"> In progress</option>
                                 <option value="Complete"> Complete</option>
                             </select>
 

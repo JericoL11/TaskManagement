@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
-class DepartmentController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,7 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        return view("department.index");
+        return view('report.index');
     }
 
     /**
@@ -81,4 +82,23 @@ class DepartmentController extends Controller
     {
         //
     }
+
+    public function getAllCountTaskSummary(){
+
+        $res = Http::get("http://127.0.0.1:8000/api/reportSummary");
+
+        return response()->json(json_decode($res,true));
+    }
+
+
+    public function getAllCompletedTask(Request $request){
+
+        $res = Http::get("http://127.0.0.1:8000/api/report/date-range/complete/", [
+            'startDate' => $request->input('startDate'),
+            'endDate' => $request->input('endDate')
+        ]);
+
+        return response()->json(json_decode($res,true));
+    }
+
 }

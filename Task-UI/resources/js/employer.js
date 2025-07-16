@@ -1,4 +1,4 @@
-import { getDateOnly, setMinToday, setMaxToday} from './dates';
+import { getDateOnly, setMaxToday, attachLongDateFormatter,  resetFormattedDateInput} from './dates';
 import {numericInput} from './custom';
  
 $(document).ready(function() {
@@ -21,7 +21,7 @@ numericInput('#contactNo');
             firstName: $('#firstName').val(),
             middleName: $('#middleName').val(),
             lastName: $('#lastName').val(),
-            birthDate: $('#birthDate').val(),
+            birthDate: $('#birthDateHidden').val(),
             address: $('#address').val(),
             contactNo: $('#contactNo').val()
        };
@@ -65,6 +65,8 @@ numericInput('#contactNo');
     function addEmployee(data){
         axios.post(`/save/employee/0`, data)
         .then(response => {
+
+            console.log(response);
             if(response.data.success){
                 Swal.fire({
                     title: `${response.data.message}`,
@@ -154,6 +156,7 @@ $('#modifyEmployeeModal').on('show.bs.modal', function (event) {
     const deleteBtn = $('#del-btn-employee');
 
 
+    resetFormattedDateInput('#birthDate', '#birthDateHidden');
     console.log(button.data())
 
  if (personid === 0) {
@@ -161,15 +164,18 @@ $('#modifyEmployeeModal').on('show.bs.modal', function (event) {
         submitBtn.text('Save');
         submitBtn.attr('data-action', 'save');
         submitBtn.attr('data-id', `${personid}`);
+        attachLongDateFormatter('#birthDate', '#birthDateHidden');
 
     } else {
         //mapping / assigning inmput fields 
         $('#firstName').val(firstName);
         $('#middleName').val(middleName);
         $('#lastName').val(lastName);
-        $('#birthDate').val(getDateOnly(birthDate));
+        $('#birthDate').val(birthDate);
         $('#address').val(address);
         $('#contactNo').val(contactNo);
+
+        attachLongDateFormatter('#birthDate', '#birthDateHidden');
 
         $('#del-btn-employee').show();
         submitBtn.text('Update');

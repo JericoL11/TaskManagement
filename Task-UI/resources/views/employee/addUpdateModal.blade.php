@@ -29,7 +29,8 @@
 
                         <div class="col-lg-6 col-md-12 form-group">
                             <label class="control-label">Birth date</label>
-                            <input type="date" id="birthDate"  name="birthDate" class="form-control" placeholder="" value=""/>
+                            <input type="date" id="birthDate" class="form-control" placeholder="" value=""/>
+                            <input type="hidden" id="birthDateHidden"  class="form-control" placeholder="" value=""/>
                         </div>
 
                           <div class="col-12 form-group">

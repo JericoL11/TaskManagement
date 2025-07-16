@@ -1,7 +1,55 @@
 // resources/js/dates.js
 
 
-//string display date
+//reset date format
+export function resetFormattedDateInput(visibleSelector, hiddenSelector) {
+    const rawDate = $(hiddenSelector).val();
+
+    if (rawDate) {
+        $(visibleSelector)
+            .attr('type', 'date')
+            .val(rawDate);
+    } else {
+        $(visibleSelector)
+            .attr('type', 'date')
+            .val('');
+    }
+}
+
+//for input date
+
+export function attachLongDateFormatter(visibleSelector, hiddenSelector) {
+    const $visibleInput = $(visibleSelector);
+    const $hiddenInput = $(hiddenSelector);
+
+    // 🔁 Format initial value if present
+    const initialVal = $visibleInput.val();
+    if (initialVal) {
+        $visibleInput.attr('type', 'text').val(formatToLongDate(initialVal));
+        $hiddenInput.val(initialVal);
+    }
+
+    // 📆 On change: format and store
+    $visibleInput.on('change', function () {
+        const selectedDate = $(this).val();
+        const formatted = formatToLongDate(selectedDate);
+        $visibleInput.attr('type', 'text').val(formatted);
+        $hiddenInput.val(selectedDate);
+    });
+
+    // 🖱 On focus: switch back to date picker
+    $visibleInput.on('focus', function () {
+        $visibleInput.attr('type', 'date');
+    }).on('blur', function () {
+        const raw = $hiddenInput.val();
+        if (raw) {
+            $visibleInput.attr('type', 'text').val(formatToLongDate(raw));
+        }
+    });
+}
+
+
+//string display date for datatable or specific inputs
 export function formatToLongDate(dateInput) {
     if (!dateInput) return '';
 

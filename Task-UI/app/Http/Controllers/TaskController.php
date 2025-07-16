@@ -105,9 +105,4 @@ class TaskController extends Controller
     }
 
 
-    public function getCompletedTaskToday(){
-        $res = Http::get("http://127.0.0.1:8000/api/completed/task/today");
-
-        return response()->json(json_decode($res,true));
-    }
 }
