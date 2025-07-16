@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TaskController;
+use Illuminate\Console\View\Components\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +29,9 @@ Route::post('save/employee/{id}', [EmployeeController::class, 'saveEmployee']);
 //task
 Route::resource('tasks', TaskController::class);
 Route::post('save/task/{id}', [TaskController::class, 'saveTask']);
-Route::get('completed/task/today', [TaskController::class, 'countCompletedTaskToday']);
+Route::get('pending/task/all', [TaskController::class, 'countAllPendingTask']);
 
 
+//report
+Route::get('reportSummary', [ReportController::class, 'reportCountSummary']);
+Route::get('report/date-range/complete', [ReportController::class, 'getCompletedTask']);

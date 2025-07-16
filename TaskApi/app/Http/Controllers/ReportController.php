@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class TaskController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +15,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $res = DB::select("CALL sprocTasks");
-
-        return response()->json([
-            'success' => true,
-            'response' => $res
-        ]);
+        //
     }
 
     /**
@@ -41,6 +36,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        //
     }
 
     /**
@@ -51,13 +47,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $res = DB::select("CALL sprocTask(?)", [$id]);
-
-        return response()->json([
-            'success' => true,
-            'response' => $res
-        ]);
-
+        //
     }
 
     /**
@@ -91,47 +81,62 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $res = DB::select("CALL sprocDelTask(?)", [$id]);
-
-        return response()->json([
-            "success" => $res[0]->isSuccess != 0 ? true : false,
-            "message" => $res[0]->message
-        ]);
+        //
     }
 
-    public function saveTask(Request $request, $id){
 
-
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string'],
-            'description' => ['required'],
-            'dueDate' => ['required', 'Date'],
-            'emp_id' => ['required', 'exists:employees,emp_id'],
-            'status' => ['required']
-
-        ]);
-
-        if($validator->fails()){
-            return response()->json([
-                'success' => false,
-                'error' => $validator->errors()->all()
-            ], 422);
-        }
-
-
-        $res = DB::select("CALL sprocSaveTask(?,?,?,?,?,?)", [
-            $id ?? 0,
-            $request->name,
-            $request->description,
-            $request->dueDate,
-            $request->status,
-            $request->emp_id
-        ]);
+ public function reportCountSummary()
+{
+    try {
+        $res = DB::select("CALL sprocTaskSummary");
 
         return response()->json([
-            'success' => $res[0]->isSuccess != 0 ? true : false,
-            'message' => $res[0]->message
+            'success' => true,
+            'allPending' => $res[0]->allPending,
+            'completedToday' => $res[0]->completedToday,
+            'dueToday' => $res[0]->due_today
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage()
+        ], 500); // Return 500 Internal Server Error
+    }
+}
+
+
+public function getCompletedTask(Request $request){
+
+    $validator = Validator::make($request->all(), [
+        'startDate' => ['required', 'date'],
+        'endDate' => ['required', 'date', 'after_or_equal:startDate']
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Validation error',
+            'errors' => $validator->errors()->all()
+        ], 422);
+    }
+
+    try{
+        $res = DB::select("CALL sprocAllCompletedTask (?, ?)", [
+                $request->startDate,
+                $request->endDate
+            ]);
+
+        return response()->json([
+            'success' => true,
+            'response' => $res
         ]);
     }
+    catch(\Exception $e){
+        return response()->json([
+            'success' => false,
+            'message' => 'Database error: ' . $e->getMessage()
+        ], 500);
+    }
+}
 
 }
