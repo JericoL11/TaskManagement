@@ -3,9 +3,7 @@ import  { formatToLongDate, attachLongDateFormatter } from "./dates"
 
 $(document).ready(function () {
 
-
     taskCount(); 
-
 
     // Attach formatters
     attachLongDateFormatter('#startDate', '#startDateHidden');
@@ -22,7 +20,6 @@ $(document).ready(function () {
         initCompletedTask(startDate, endDate);
     });
 
-    
 });
 
 function initCompletedTask(startDate, endDate) {
@@ -78,9 +75,6 @@ function initCompletedTask(startDate, endDate) {
         ]
     });
 }
-
-
-
 
 function taskCount(){
     const $spinner_dueDate = $('#dueDate-taskLoader');

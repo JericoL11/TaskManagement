@@ -12,15 +12,25 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+
+    //this tell laravel that 'user_id' is the primary key
+    protected $primaryKey = 'user_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
+
+//laravel sanctum witll automatically insert the token in PERSONAL ACCESS TOKEN.
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'username',
         'email',
         'password',
+        'person_id'
     ];
 
     /**
@@ -42,3 +52,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 }
+
+
+

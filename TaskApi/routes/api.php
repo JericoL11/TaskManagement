@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TaskController;
+use App\Models\User;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +22,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+
+
+});
+
+// Protected routes
+Route::middleware('auth:sanctum')->group(function () {
+  
+
+
 });
 
 //employeess
@@ -35,3 +46,13 @@ Route::get('pending/task/all', [TaskController::class, 'countAllPendingTask']);
 //report
 Route::get('reportSummary', [ReportController::class, 'reportCountSummary']);
 Route::get('report/date-range/complete', [ReportController::class, 'getCompletedTask']);
+
+
+//user
+Route::resource('user', User::class);
+
+
+//auth
+
+Route::post('/register', [AuthController::class, 'register']);
+
