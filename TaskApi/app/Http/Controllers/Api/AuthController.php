@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Person;
@@ -14,14 +14,13 @@ use Illuminate\Validation\ValidationException;
 class AuthController extends Controller
 {
     /**
-     * Register User
-     *  @param Request $request 
-     *  @return User
+     * @param Request
+     * @return User
      */
 
-    public function register(Request $request)
+    public function createUser(Request $request)
     {
-        // Validate first
+         // Validate first
         $validators = Validator::make($request->all(), [
             'username' => ['required', 'string', 'unique:users,username'],
             'password' => ['required', 'min:8'],
@@ -76,11 +75,10 @@ class AuthController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-        
     }
 
-    public function login(Request $request){
 
+    public function loginUser(Request $request){
         $validators = Validator::make($request->all(),[
             'username' => ['required'],
             'password' => ['required', 'min:6']
@@ -93,13 +91,15 @@ class AuthController extends Controller
             ],422);
         }
 
-        $user = USER::where('username', $request->username)->first();  //check the username first
+        $user = User::where('username', $request->username)->first();  //check the username first
 
+        // return response()->json(Hash::check($request->password, $user->password));
+
+        
         // 🔐 Fail if user not found or password is incorrect
-        if(!$user || Hash::check($request->password, $user->password)){
-             throw ValidationException::withMessages([
-                'username' => ['Invalid credentials.'],
-            ]);
+        if(!$user || !Hash::check($request->password, $user->password)){
+       
+            return 'Invalid credentials.';
         }
 
         $token = $user->createToken('api-token')->plainTextToken; 
@@ -124,4 +124,6 @@ class AuthController extends Controller
     {
         return response()->json($request->user());
     }
+
 }
+

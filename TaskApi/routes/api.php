@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Http\Request;
@@ -28,13 +29,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
-  
 
+ Route::resource('employees', EmployeeController::class);
+ Route::get('report/date-range/complete', [ReportController::class, 'getCompletedTask']);
+ Route::post('auth/logout', [AuthController::class, 'logout']);
 
 });
 
+
 //employeess
-Route::resource('employees', EmployeeController::class);
+
 Route::post('save/employee/{id}', [EmployeeController::class, 'saveEmployee']);
 
 //task
@@ -45,14 +49,11 @@ Route::get('pending/task/all', [TaskController::class, 'countAllPendingTask']);
 
 //report
 Route::get('reportSummary', [ReportController::class, 'reportCountSummary']);
-Route::get('report/date-range/complete', [ReportController::class, 'getCompletedTask']);
-
 
 //user
-Route::resource('user', User::class);
+//Route::resource('user', UserController::class);
 
 
 //auth
-
-Route::post('/register', [AuthController::class, 'register']);
-
+Route::post('auth/register', [AuthController::class, 'createUser']);
+Route::post('auth/login', [AuthController::class, 'loginUser']);
