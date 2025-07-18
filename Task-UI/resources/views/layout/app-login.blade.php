@@ -32,16 +32,15 @@
 <body>
     <!-- As a link -->
     <nav class="navbar bg-body-tertiary shadow ">
-            <div class="container-fluid fs-1 d-flex justify-content-Between">
-                <a class="navbar-brand" href="/" title="Go to Dashboard"></a>
-                <a class="navbar-brand" href="/dashboard" title="Go to Dashboard">TASK MANAGEMENT</a>
-                <button class="btn btn-warning" id="logout-btn"> Logout</button>
+            <div class="container-fluid fs-1 d-flex justify-content-end">
+                <a class="navbar-brand" href="/" title="Login">Login</a>
+                <a class="navbar-brand" href="/signup-page" title="Register">Register</a>
             </div>
     </nav>
 
        
 
-    <div class="d-flex justify-content-center fw-bold fs-2 my-5">
+    <div class="d-flex justify-content-center fw-bold fs-2 my-3">
         @yield('title')
         
     </div>

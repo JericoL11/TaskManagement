@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class EmployeeController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return view("employee.index");
+        //
     }
 
     /**
@@ -80,41 +80,7 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-        $res = Http::delete("http://127.0.0.1:8000/api/employees/{$id}");
-
-        return response()->json(json_decode($res,true));
+        //
     }
 
-    public function getAllEmployers(Request $request)
-    {
-        $token = $request->bearerToken(); // get token from frontend request (if sent)
-
-        $res = Http::withToken($token)->get("http://127.0.0.1:8000/api/employees", [
-            "searchKey" => $request->key
-        ]);
-
-        return response()->json(json_decode($res));
-    }
-
-
-    public function saveEmployee(Request $request, $id){
-
-        $data = [
-            'firstName' => $request->input('firstName'),
-            'middleName' => $request->input('middleName'),
-            'lastName' => $request->input('lastName'),
-            'birthDate' => $request->input('birthDate'),
-            'address' => $request->input('address'),
-            'contactNo' => $request->input('contactNo')
-        ];
-
-
-        
-        $res = Http::post("http://127.0.0.1:8000/api/save/employee/{$id}", $data);
-
-
-        return response()->json(json_decode($res, true));
-    }
 }
-
-

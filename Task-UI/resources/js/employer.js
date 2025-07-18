@@ -194,14 +194,21 @@ $('#modifyEmployeeModal').on('hidden.bs.modal', function () {
 
 function initEmployersDatatable(){
  //table - ajax
+
+     const token = localStorage.getItem('auth_token');
+
      $('#employers-table').DataTable({
         processing: true,
         serverSide: false, // set to true only if backend supports pagination
         ajax: {
             url: 'getAllEmployers',
+             type: 'GET',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
             dataSrc: function (json) {
                 return json.response; // assumes your API returns { success, response: [...] }
-            }
+            },
         },
         columns: [
             { data: 'emp_id', visible: false }, // hidden ID
