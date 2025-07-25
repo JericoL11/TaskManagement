@@ -42,6 +42,17 @@
                             <label class="control-label">Contact #</label>
                             <input type="text" id="contactNo" name="contactNo"  class="form-control" placeholder="" value=""/>
                         </div>
+
+
+                        <div class="col-lg-6 col-md-12 form-group">
+                            <label class="control-label">Department</label>
+                            <select id="department_lookup" class="form-control" style="width: 100%">
+                               {{-- display via jquery --}}
+                            </select>
+                        </div>
+
+                        <input type="hidden" id="userid" class="form-control" />
+                        
                     </div>
             </form>
       </div>

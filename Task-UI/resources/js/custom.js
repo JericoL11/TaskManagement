@@ -11,3 +11,12 @@ export function numericInput(selector, maxLength = 11) {
         $(this).val(val);
     });
 }
+
+export function disableManualDatetimeInput(selector) {
+    $(selector).on('keydown paste', function (e) {
+        e.preventDefault();
+    });
+}
+
+
+

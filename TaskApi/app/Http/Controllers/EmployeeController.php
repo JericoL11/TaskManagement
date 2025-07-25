@@ -17,7 +17,7 @@ class EmployeeController extends Controller
      */ 
     public function index(Request $request )
     {
-        
+            
         $searchKey = '%' . $request->searchKey . '%';
 
         $res = DB::select("CALL sprocEmployees(?)",[
@@ -101,7 +101,7 @@ class EmployeeController extends Controller
         $res = DB::select("CALL sprocDelEmployee(?)", [$id]);
 
         return response()->json([
-            "success" => $res[0]->status != 0 ? true : false,
+            "success" => (bool) $res[0]->status,
             "message" => $res[0]->message
         ]);
     }
@@ -109,16 +109,17 @@ class EmployeeController extends Controller
 
     public function saveEmployee(Request $request, $id){
 
-
       $validator = Validator::make($request->all(), [
                 'firstName' => ['required', 'string'],
                 'lastName' => ['required', 'string'],
                 'birthDate' => ['required', 'date'],    
                 'address' => ['required', 'string'],
                 'contactNo' => ['required', 'string'],
+                'user_id' => ['required', 'int'],
+                'dept_id' => ['required', 'int']
             ],
         [
-            'contactNo.required' => 'Contact Number field is required'
+            'contactNo.required' => 'Contac t Number field is required'
         ]);
 
         
@@ -128,23 +129,36 @@ class EmployeeController extends Controller
                 'error' => $validator->errors()->all()
             ],422);
         }
+   
+        try{
+            DB::beginTransaction();
+            $res = DB::select("CALL sprocSaveEmployee(?,?,?,?,?,?,?,?,?)", [
+                $id ?? 0,
+                $request->firstName,
+                $request->lastName,
+                $request->middleName,
+                $request->birthDate,
+                $request->address,
+                $request->contactNo,
+                $request->dept_id,
+                $request->user_id
+            ]);
+        
+            DB::commit();
+            return response()->json([
+                'success' =>(bool) $res[0]->isSuccess,
+                'message' => $res[0]->message
+            ]);
 
+        }
+          catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ], 500); // Return 500 Internal Server Error
+        }
 
-        $res = DB::select("CALL sprocSaveEmployee(?,?,?,?,?,?,?)", [
-            $id ?? 0,
-            $request->firstName,
-            $request->lastName,
-            $request->middleName,
-            $request->birthDate,
-            $request->address,
-            $request->contactNo,
-        ]);
-
-
-        return response()->json([
-            'success' => $res[0]->status,
-            'message' => $res[0]->message
-        ]);
-
+       
     }
 }

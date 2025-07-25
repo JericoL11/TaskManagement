@@ -4,9 +4,30 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Psy\CodeCleaner\ReturnTypePass;
 
-class TaskController extends Controller
+class DepartmentController extends Controller
 {
+
+    public function getAllDepartments(Request $request){
+
+        $token = $request->bearerToken();
+       $res = Http::withToken($token)->get("http://127.0.0.1:8000/api/departments");
+       return response()->json(json_decode($res,true));
+    }
+
+
+    public function saveDepartment(Request $request, $id){
+
+        $token = $request->bearerToken();
+        $res = Http::withToken($token)->post("http://127.0.0.1:8000/api/save/department/{$id}", [
+            'dept_name' => $request->input('dept_name')
+        ]);
+
+        return response()->json(json_decode($res,true));
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +35,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return view("task.index");
+        return view('department.index');
     }
 
     /**
@@ -78,37 +99,8 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request,$id)
+    public function destroy($id)
     {
-
-        $token = $request->bearerToken();
-
-        $res = Http::withToken($token)->delete("http://127.0.0.1:8000/api/tasks/{$id}");
-        return response()->json(json_decode($res,true));
+        //
     }
-
-    public function getAllTask(Request $request){
-
-        $token = $request->bearerToken();
-        $res = Http::withToken($token)->get('http://127.0.0.1:8000/api/tasks');
-
-        return response()->json(json_decode($res, true));
-    }
-
-
-    public function saveTask(Request $request, $id){
-
-        $token = $request->bearerToken();
-        $res = Http::withToken($token)->post("http://127.0.0.1:8000/api/save/task/{$id}", [
-            'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'dueDate' => $request->input('dueDate'),
-            'emp_id' => $request->input('emp_id'),
-            'status' => $request->input('status')
-        ]); 
-
-        return response()->json(json_decode($res, true));
-    }
-
-
 }

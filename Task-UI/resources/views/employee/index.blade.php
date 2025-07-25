@@ -6,7 +6,7 @@
 
 <div class="d-flex justify-content-end">
     <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary my-2" data-bs-toggle="modal" data-personid='0' data-bs-target="#modifyEmployeeModal">
+<button type="button" class="btn btn-primary my-2" data-bs-toggle="modal" data-empid='0' data-bs-target="#modifyEmployeeModal">
  <i class="bi bi-plus-circle"></i> Add New </button>
 
 </div>

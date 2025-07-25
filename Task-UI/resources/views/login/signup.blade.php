@@ -58,7 +58,7 @@
 
                 <div class="col-md-12 col-sm-12">
                 <label class="form-label">Confirm password</label>
-                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
               </div>
 
               <div class="d-grid mt-4">

@@ -6,10 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>VFI Task Management</title>
 
-    {{-- Vite Assets --}}
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    {{-- Bootstrap CSS --}}
+    <script>
+        const token = localStorage.getItem('auth_token');
+        const currentPath = window.location.pathname;
+
+        // If logged in, don't allow login or register page
+        if (token && (currentPath === '/login' || currentPath === '/register')) {
+            window.location.href = '/dashboard';
+        }
+    </script>
+
+
+        {{-- Bootstrap CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
     {{-- DataTables CSS --}}
@@ -25,6 +34,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
 
+ {{-- Vite Assets --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
   <!-- Animation css -->
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">

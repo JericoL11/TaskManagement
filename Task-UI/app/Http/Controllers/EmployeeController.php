@@ -78,9 +78,10 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        $res = Http::delete("http://127.0.0.1:8000/api/employees/{$id}");
+        $token = $request->bearerToken();
+        $res = Http::withToken($token)->delete("http://127.0.0.1:8000/api/employees/{$id}");
 
         return response()->json(json_decode($res,true));
     }
@@ -97,7 +98,18 @@ class EmployeeController extends Controller
     }
 
 
+    public function getAllDepartments(Request $request) {
+        $res = Http::get("http://127.0.0.1:8000/api/departments", [
+            "searchKey" => $request->key //select2 js
+        ]);
+
+        return response()->json(json_decode($res,true));
+    }
+
+
     public function saveEmployee(Request $request, $id){
+
+        $token = $request->bearerToken();
 
         $data = [
             'firstName' => $request->input('firstName'),
@@ -105,13 +117,12 @@ class EmployeeController extends Controller
             'lastName' => $request->input('lastName'),
             'birthDate' => $request->input('birthDate'),
             'address' => $request->input('address'),
-            'contactNo' => $request->input('contactNo')
+            'contactNo' => $request->input('contactNo'),
+            'user_id' => $request->input('user_id'),
+            'dept_id' => $request->input('dept_id')
         ];
 
-
-        
-        $res = Http::post("http://127.0.0.1:8000/api/save/employee/{$id}", $data);
-
+        $res = Http::withToken($token)->post("http://127.0.0.1:8000/api/save/employee/{$id}", $data);
 
         return response()->json(json_decode($res, true));
     }

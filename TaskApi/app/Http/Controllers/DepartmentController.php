@@ -5,23 +5,69 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Stmt\Catch_;
+use Spatie\FlareClient\Flare;
 
-class TaskController extends Controller
+class DepartmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $res = DB::select("CALL sprocTasks");
+        
+        $searchKey = '%' . $request->searchKey . '%';
+
+        $res = DB::select("CALL sprocDepartments(?)", [
+            $searchKey
+        ]);
 
         return response()->json([
             'success' => true,
             'response' => $res
         ]);
     }
+
+    public function saveDepartment(Request $request, $id){
+
+        $validate = Validator::make($request->all(), [
+            'dept_name' => ['required']
+        ]);
+
+
+        if($validate->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => $validate->errors()->all()
+            ]);
+        }
+
+
+        try{
+
+            $res = DB::select("CALL sprocSaveDepartment(?,?)", [
+                $id ?? 0,
+                $request->dept_name
+            ]);
+
+            return response()->json([
+                'success' =>(bool) $res[0]->isSuccess,
+                'message' => $res[0]->message
+            ]);
+        
+        } 
+        catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Database error: ' . $e->getMessage()
+            ], 500); // Return 500 Internal Server Error
+        }
+
+        
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -41,6 +87,7 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+        //
     }
 
     /**
@@ -51,13 +98,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $res = DB::select("CALL sprocTask(?)", [$id]);
-
-        return response()->json([
-            'success' => true,
-            'response' => $res
-        ]);
-
+        //
     }
 
     /**
@@ -91,47 +132,6 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $res = DB::select("CALL sprocDelTask(?)", [$id]);
-
-        return response()->json([
-            "success" => (bool) $res[0]->isSuccess,
-            "message" => $res[0]->message
-        ]);
+        //
     }
-
-    public function saveTask(Request $request, $id){
-
-
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string'],
-            'description' => ['required'],
-            'dueDate' => ['required', 'Date'],
-            'emp_id' => ['required', 'exists:employees,emp_id'],
-            'status' => ['required']
-
-        ]);
-
-        if($validator->fails()){
-            return response()->json([
-                'success' => false,
-                'error' => $validator->errors()->all()
-            ], 422);
-        }
-
-
-        $res = DB::select("CALL sprocSaveTask(?,?,?,?,?,?)", [
-            $id ?? 0,
-            $request->name,
-            $request->description,
-            $request->dueDate,
-            $request->status,
-            $request->emp_id
-        ]);
-
-        return response()->json([
-            'success' => $res[0]->isSuccess != 0 ? true : false,
-            'message' => $res[0]->message
-        ]);
-    }
-
 }

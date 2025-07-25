@@ -9,6 +9,7 @@ class LoginController extends Controller
 {
 
     public function signin(){
+
         return view("login.signin");
     }
 

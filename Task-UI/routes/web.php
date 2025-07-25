@@ -35,6 +35,7 @@ Route::resource('report', ReportController::class);
 //employee
 Route::get('getAllEmployers', [EmployeeController::class, 'getAllEmployers']);
 Route::post('save/employee/{id}', [EmployeeController::class, 'saveEmployee']);
+Route::get('getAllDepartments', [EmployeeController::class, 'getAllDepartments']); //lookup
 
 //task
 Route::get('getAllTask', [TaskController::class, 'getAllTask']);
@@ -44,11 +45,19 @@ Route::post('save/task/{id}', [TaskController::class, 'saveTask']);
 Route::get('getAllTaskSummary', [ReportController::class, 'getAllCountTaskSummary']);
 Route::get('getTaskReport', [ReportController::class, 'getAllCompletedTask']);
 
+//department
+Route::resource('department', DepartmentController::class);
+Route::get('getDepartments', [DepartmentController::class, 'getAllDepartments']);
+Route::post('save/department/{id}', [DepartmentController::class, 'saveDepartment']);
 
 //login
 Route::get('/', [LoginController::class, 'signin']);
 Route::get('signup-page', [LoginController::class, 'signup']);
 
+//auth-public
 Route::post('/auth/login', [AuthProxyController::class, 'login']);
 Route::post('/auth/register', [AuthProxyController::class, 'register']);
 Route::post('/auth/logout', [AuthProxyController::class, 'logout']);
+
+//user
+Route::get('getUserId', [UserController::class, 'getUserId']);

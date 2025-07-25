@@ -1,8 +1,11 @@
 import axios from "axios";
 import  { formatToLongDate, attachLongDateFormatter } from "./dates"
+import { getToken } from "./auth-check";
 
 $(document).ready(function () {
 
+   
+    getToken();
     taskCount(); 
 
     // Attach formatters
@@ -23,6 +26,8 @@ $(document).ready(function () {
 });
 
 function initCompletedTask(startDate, endDate) {
+     //const token = localStorage.getItem('auth_token');
+
     $('#completed-tasks-table').DataTable({
         processing: true,
         serverSide: false, // Set to true only if backend supports server-side pagination
@@ -30,10 +35,14 @@ function initCompletedTask(startDate, endDate) {
         ajax: {
             url: '/getTaskReport',
             type: 'GET',
+              beforeSend: function (xhr) {
+             xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+             },
             data: {
                 startDate: startDate,
                 endDate: endDate
             },
+              
             dataSrc: function (json) {
                 console.log(json);
 

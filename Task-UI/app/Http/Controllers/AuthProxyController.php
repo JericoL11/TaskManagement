@@ -20,7 +20,7 @@ class AuthProxyController extends Controller
 
     public function register(Request $request)
     {
-        $res = Http::post("http://127.0.0.1:8000/api/register", [
+        $res = Http::post("http://127.0.0.1:8000/api/auth/register", [
             'username'   => $request->input('username'),
             'password'   => $request->input('password'),
             'firstName'  => $request->input('firstName'),
@@ -29,9 +29,13 @@ class AuthProxyController extends Controller
             'address'    => $request->input('address'),
             'birthDate'  => $request->input('birthDate'),
             'contactNo'  => $request->input('contactNo'),
+            'password_confirmation' => $request->input('password_confirmation')
+
         ]);
 
         return response()->json(json_decode($res, true));
+        // return view('login.signin',  compact('data'));
+
     }
 
     public function logout(Request $request){

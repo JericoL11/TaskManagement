@@ -83,4 +83,10 @@ class UserController extends Controller
         //
     }
 
+    public function getUserId(Request $request){
+        $token = $request->bearerToken();
+        $res = Http::withToken($token)->get("http://127.0.0.1:8000/api/auth/profile");
+        return response()->json(json_decode($res, true));
+    }
+
 }

@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { getDateOnly, setMinToday, formatToLongDate, attachLongDateFormatter,resetFormattedDateInput} from './dates';
+import { getToken } from './auth-check';
+import { disableManualDatetimeInput } from './custom';
 
-console.log('task.js');
 
 $(document).ready(function() {
+    getToken();
     initTaskDatatable();
+    disableManualDatetimeInput('#dueDate');
 
     $('.action-btn-task').on('click', function(e) {
         e.preventDefault();
@@ -121,10 +124,9 @@ $(document).ready(function() {
 
 
     function deleteTask(id){
+
         axios.delete(`task/${id}`)
         .then(response => {
-
-
             console.log(response.data);
         if(response.data.success){
                 Swal.fire({
@@ -191,6 +193,10 @@ $('#modifyTaskModal').on('show.bs.modal', function (event) {
                 url: 'getAllEmployers',
                 dataType: 'json',
                 delay: 250,
+                  headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
+                        'Accept': 'application/json'
+                    },
                 data: function (params) {
                     return {
                         key: params.term || '' // 👈 send the search key to Laravel
@@ -275,7 +281,6 @@ $('#modifyTaskModal').on('hidden.bs.modal', function () {
 
 });
 
-
     //table - ajax
     function initTaskDatatable(){
          $('#task-table').DataTable({
@@ -283,9 +288,13 @@ $('#modifyTaskModal').on('hidden.bs.modal', function () {
         serverSide: false, // set to true only if backend supports pagination
         ajax: {
             url: 'getAllTask',
+             beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
             dataSrc: function (json) {
                 return json.response; // assumes your API returns { success, response: [...] }
-            }
+            },
+
         },
         columns: [
             { data: 'task_id', visible: false }, // hidden ID

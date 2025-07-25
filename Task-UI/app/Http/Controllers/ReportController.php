@@ -83,9 +83,10 @@ class ReportController extends Controller
         //
     }
 
-    public function getAllCountTaskSummary(){
+    public function getAllCountTaskSummary(Request $request){
 
-        $res = Http::get("http://127.0.0.1:8000/api/reportSummary");
+        $token = $request->bearerToken();
+        $res = Http::withToken($token)->get("http://127.0.0.1:8000/api/reportSummary");
 
         return response()->json(json_decode($res,true));
     }
@@ -93,7 +94,9 @@ class ReportController extends Controller
 
     public function getAllCompletedTask(Request $request){
 
-        $res = Http::get("http://127.0.0.1:8000/api/report/date-range/complete/", [
+        $token = $request->bearerToken(); // get token from frontend request (if sent)
+
+        $res = Http::withToken($token)->get("http://127.0.0.1:8000/api/report/date-range/complete/", [
             'startDate' => $request->input('startDate'),
             'endDate' => $request->input('endDate')
         ]);

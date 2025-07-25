@@ -3,7 +3,7 @@
 @section('title', 'DASHBOARD')
 
 @section('content')
-<div class="container">
+<div class="container ">
 
   <div class="row justify-content-center mb-5">
     <div class="col-12">
@@ -18,7 +18,8 @@
        <div class="card-body">
             <p id="Due-dateTask">
                 <span class="spinner-border spinner-border-sm d-none" role="status" id="dueDate-taskLoader"></span>
-                <span class="fs-2" id="dueDate-taskCountText">0</span></p>
+                <span class="fs-2" id="dueDate-taskCountText">0</span>
+            </p>
         </div>
       </div>
     </div>
@@ -84,7 +85,23 @@
             </div>
         </div>
 
-             <div class="col-lg-4 col-md-6 col-sm-12">
+         <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="card h-100 text-center shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    Departments
+                </div>
+                <div class="card-body">
+                    {{-- <h5 class="card-title">Assign Task</h5> --}}
+                    <p class="card-text">Add, Update</p>
+                    <a href="{{ route('department.index') }}" class="btn btn-primary text-white">VIEW</a>
+                </div>  
+                <div class="card-footer text-muted">
+                    <!-- Optional footer -->
+                </div>
+            </div>
+        </div>
+
+          <div class="col-lg-4 col-md-6 col-sm-12">
             <div class="card h-100 text-center shadow-sm">
                 <div class="card-header bg-primary text-white">
                     Reports
@@ -99,9 +116,10 @@
                 </div>
             </div>
         </div>
+
+       
     </div>
 </div>
 
-
-  
 @endsection
+
