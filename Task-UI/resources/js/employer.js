@@ -76,7 +76,7 @@ const $selectDepartment = $('#department_lookup');
             allowClear: true,
             minimumResultsForSearch: 0,
             ajax: {
-                url: 'getAllDepartments',
+                url: 'getDepartments',
                 dataType: 'json',
                 delay: 250,
                   headers: {
@@ -85,7 +85,7 @@ const $selectDepartment = $('#department_lookup');
                     },
                 data: function (params) {
 
-                    return {
+                    return { 
                         key: params.term || '' // 👈 send the search key to controller
                     };
                 },
@@ -303,6 +303,7 @@ function initEmployersDatatable(){
             },
             { data: 'address' }, 
             { data: 'contactNo' }, 
+            { data: 'dept_name'},
             {
                 data: null,
                 orderable: false,

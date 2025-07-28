@@ -7,5 +7,4 @@ import './task';
 import './authProxy';
 import './department';
 
-
 //console.trace("Tracing origin of variable:", token);

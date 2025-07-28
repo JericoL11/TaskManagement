@@ -11,8 +11,10 @@ class DepartmentController extends Controller
 
     public function getAllDepartments(Request $request){
 
-        $token = $request->bearerToken();
-       $res = Http::withToken($token)->get("http://127.0.0.1:8000/api/departments");
+       $token = $request->bearerToken();
+       $res = Http::withToken($token)->get("http://127.0.0.1:8000/api/departments", [
+            "searchKey" => $request->key
+       ]);
        return response()->json(json_decode($res,true));
     }
 

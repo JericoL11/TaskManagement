@@ -98,13 +98,14 @@ class EmployeeController extends Controller
     }
 
 
-    public function getAllDepartments(Request $request) {
-        $res = Http::get("http://127.0.0.1:8000/api/departments", [
-            "searchKey" => $request->key //select2 js
-        ]);
+    // public function getAllDepartments(Request $request) {
 
-        return response()->json(json_decode($res,true));
-    }
+    //     $res = Http::get("http://127.0.0.1:8000/api/departments", [
+    //         "searchKey" => $request->key //select2 js
+    //     ]);
+
+    //     return response()->json(json_decode($res,true));
+    // }
 
 
     public function saveEmployee(Request $request, $id){

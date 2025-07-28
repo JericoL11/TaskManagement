@@ -35,7 +35,7 @@ Route::resource('report', ReportController::class);
 //employee
 Route::get('getAllEmployers', [EmployeeController::class, 'getAllEmployers']);
 Route::post('save/employee/{id}', [EmployeeController::class, 'saveEmployee']);
-Route::get('getAllDepartments', [EmployeeController::class, 'getAllDepartments']); //lookup
+//  Route::get('getAllDepartments', [EmployeeController::class, 'getAllDepartments']); //lookup
 
 //task
 Route::get('getAllTask', [TaskController::class, 'getAllTask']);

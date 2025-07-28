@@ -7,6 +7,15 @@
 
 <div class="row justify-content-center mb-5">
 
+
+
+    
+  <div class="col-lg-3 col-md-4 col-sm-4">
+      <label class="control-label">Date Range</label>
+      <input type="text" id="daterange" name="daterange" class="form-control"  />
+  </div>
+
+{{--     
   <div class="col-lg-3 col-md-4 col-sm-4">
       <label class="control-label">Start Date</label>
       <input type="date" class="form-control" id="startDate" />
@@ -17,7 +26,9 @@
       <label class="control-label">End Date</label>
       <input type="date" class="form-control" id="endDate" />
       <input type="hidden" name="endDate" id="endDateHidden" />
-</div>
+</div> --}}
+
+
   <div class="col-lg-2 col-md-2 col-sm-2  mt-sm-3 mt-3">
       <button class="btn btn-primary px-4 py-2" id="filter-btn">Search</button>
   </div>

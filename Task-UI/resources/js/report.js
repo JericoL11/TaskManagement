@@ -4,24 +4,42 @@ import { getToken } from "./auth-check";
 
 $(document).ready(function () {
 
-   
+    $(function () {
+        // Declare shared variables
+        let startDate = moment().subtract(7, 'days');
+        let endDate = moment();
+
+        // Initialize the input visually
+        $('#daterange').val(startDate.format('MM/DD/YYYY') + ' - ' + endDate.format('MM/DD/YYYY'));
+
+        // Apply the daterangepicker
+        $('#daterange').daterangepicker({
+            startDate: startDate,
+            endDate: endDate,
+            opens: 'center'
+        }, function (start, end, label) {
+            // Update variables when user selects new dates
+            startDate = start;
+            endDate = end;
+            console.log("New range selected:", start.format('YYYY-MM-DD'), "to", end.format('YYYY-MM-DD'));
+        });
+
+        // Button click event
+        $('#filter-btn').on('click', function () {
+            console.log('Button clicked');
+            console.log('start:', startDate.format('YYYY-MM-DD'), 'end:', endDate.format('YYYY-MM-DD'));
+            initCompletedTask(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
+        });
+    });
+
+
     getToken();
     taskCount(); 
 
     // Attach formatters
-    attachLongDateFormatter('#startDate', '#startDateHidden');
-    attachLongDateFormatter('#endDate', '#endDateHidden');
+    // attachLongDateFormatter('#startDate', '#startDateHidden');
+    // attachLongDateFormatter('#endDate', '#endDateHidden');
 
-    // Button click to use hidden values
-    $('#filter-btn').on('click', function () {
-        const startDate = $('#startDateHidden').val();
-        const endDate = $('#endDateHidden').val();
-
-        console.log('button clicked');
-        console.log('start:', startDate, 'end:', endDate);
-
-        initCompletedTask(startDate, endDate);
-    });
 
 });
 

@@ -17,6 +17,7 @@
             <th>Name</th>
             <th>Address</th>
             <th>Contact No.</th>
+            <th>Department</th>
             <th>Action</th>
         </tr>
     </thead>
