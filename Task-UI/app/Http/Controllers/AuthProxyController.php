@@ -29,6 +29,7 @@ class AuthProxyController extends Controller
             'address'    => $request->input('address'),
             'birthDate'  => $request->input('birthDate'),
             'contactNo'  => $request->input('contactNo'),
+            'email' => $request->input('email'),
             'password_confirmation' => $request->input('password_confirmation')
 
         ]);
@@ -50,5 +51,25 @@ class AuthProxyController extends Controller
 
         return response()->json(json_decode($res, true));
 
+    }
+
+
+    public function sendCode(Request $request){
+        $res = http::post("http://127.0.0.1:8000/api/forgot-password", [
+            'email' => $request->input('email')
+        ]);
+
+        return response()->json(json_decode($res, true));
+    }
+
+    public function resetPassword(Request $request){
+        $res = http::post("http://127.0.0.1:8000/api/reset-password", [
+            'email' => $request->input('email'),
+            'code' => $request->input('code'),
+            'password' => $request->input('password'),
+            'password_confirmation' => $request->input('password_confirmation')
+        ]);
+
+        return response()->json(json_decode($res,true));
     }
 }

@@ -26,12 +26,12 @@ class AuthController extends Controller
             'firstName' => ['required', 'string'],
             'lastName' => ['required', 'string'],
             'middleName' => ['nullable', 'string'],
+            'email' => ['required', 'email', 'unique:users,email'],
             'birthDate' => ['required', 'date'],
             'address' => ['required', 'string'],
             'contactNo' => ['required', 'string']   
         ]);
 
-        
         if ($validators->fails()) {
             return response()->json([
                 'success' => false,
@@ -55,6 +55,7 @@ class AuthController extends Controller
           User::create([
             'username' => $request->username,
             'password' => Hash::make($request->password),
+            'email' => $request->email,
             'person_id' => $person->person_id
         ]);
             
@@ -76,7 +77,6 @@ class AuthController extends Controller
             ], 500);
         }
     }
-
 
     public function loginUser(Request $request){
         $validators = Validator::make($request->all(),[
@@ -134,8 +134,6 @@ class AuthController extends Controller
         else{
             return response()->json(['success' => false, 'message' => 'User is not available']);
         }
-
-
      
     }
 

@@ -7,12 +7,14 @@ $(document).ready(function (){
     $('#signIn-btn').on('click', function (){
 
         const username_input =  $('#username').val();
-        const password_input = $('#password').val();
+        const password_input = $('#password_signin').val();
 
         const data = {
             username: username_input,
             password: password_input
         };     
+
+        console.log(data);
 
       if (username_input && password_input) {
             Submit_signIn(data);
@@ -44,6 +46,7 @@ $(document).ready(function (){
         const birthDate_in = $('#birthDate').val();
         const address_in = $('#address').val();
         const contactNo_in = $('#contactNo').val();
+        const email_in = $('#email').val();
 
         const data = {
             username: username_in,
@@ -54,15 +57,157 @@ $(document).ready(function (){
             middleName: middleName_in,
             birthDate: birthDate_in,
             address: address_in,
+            email: email_in,
             contactNo: contactNo_in
         };   
 
         Submit_Signup(data);
     });
 
+
+    $('#btn-forgotPass-email').on('click', function(e){
+        e.preventDefault();
+        const emailAddress = $('#emailAddress').val();
+
+        const data = {
+            email: emailAddress
+        };
+
+
+        verifyEmail(data);
+        
+    });
+
+
+    $('#btn-forgotPass-newPass').on('click', function(e){
+        e.preventDefault();
+
+        const emailAddress = $('#verifiedEmail').val();
+        const code = $('#code').val();
+        const password = $('#password').val();
+        const password_confirmation = $('#password_confirmation').val();
+
+        const data= {
+            email: emailAddress,
+            code: code,
+            password: password,
+            password_confirmation: password_confirmation
+        };
+
+        ChangePass(data);
+        
+    });
+
 });
 
 
+function verifyEmail(data){
+    axios.post(`forgot-password/email`, data)
+    .then(response => {
+        console.log("response", response);
+
+        if(response.data.success){
+
+            //map and show 
+            $('#verifiedEmail').val(data.email);
+            $('#resetPasswordModal').modal('show');
+
+            //reset this modal
+            $('#verifyEmailModal').modal('hide');
+        }
+        else{
+            const errorMsg = Array.isArray(response.data.error)
+                ? response.data.error.join('<br>')
+                : response.data.message || "Unknown error";
+
+            Swal.fire({
+                title: "Error",
+                html: errorMsg,
+                icon: "info"
+            });
+        }
+
+    })
+    .catch(err => {
+        console.error("Error response", err);
+
+        const errorArray = err.response?.data?.error || ['Unexpected error occurred.'];
+        const errorMsg = Array.isArray(errorArray) ? errorArray.join('<br>') : errorArray;
+
+        Swal.fire({
+            title: "Error",
+            html: errorMsg,
+            icon: "error"
+        });
+    });
+}
+
+
+// When resetPasswordModal is shown, hide the verifyEmailModal
+$('#resetPasswordModal').on('show.bs.modal', function (event) {
+    $('#verifyEmailModal').modal('hide');
+});
+
+// Clear the email field when verifyEmailModal is hidden
+$('#verifyEmailModal').on('hidden.bs.modal', function () {
+    $('#emailAddress').val('');  // ✅ clear value
+});
+
+// Clear fields when resetPasswordModal is hidden
+$('#resetPasswordModal').on('hidden.bs.modal', function () {
+    $('#verifiedEmail').val('');
+    $('#code').val('');
+    $('#password').val('');
+    $('#password_confirmation').val('');
+});
+
+
+
+function ChangePass(data){
+    axios.post(`forgot-password/new-pass`, data)
+    .then(response => {
+        console.log("response", response);
+
+        if(response.data.success){
+              Swal.fire({
+                title: "Success",
+                text: 'Password Updated Successfully',
+                icon: "success"
+            });
+
+                $('#resetPasswordModal').modal('hide');
+
+        }
+        else{
+            const errorMsg = Array.isArray(response.data.error)
+                ? response.data.error.join('<br>')
+                : response.data.message || "Unknown error";
+
+            Swal.fire({
+                title: "warning",
+                html: errorMsg,
+                icon: "info"
+            });
+        }
+
+    })
+    .catch(err => {
+        console.error("Error response", err);
+        const errorArray = err.response?.data?.error || ['Unexpected error occurred.'];
+        const errorMsg = Array.isArray(errorArray) ? errorArray.join('<br>') : errorArray;
+
+        Swal.fire({
+            title: "Error",
+            html: errorMsg,
+            icon: "error"
+        });
+    });
+}
+
+
+$('#modifyEmployeeModal').on('show.bs.modal', function (event) {
+    
+});
 
 function logoutUser() {
    //const token = localStorage.getItem('auth_token');

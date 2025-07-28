@@ -40,11 +40,17 @@
                 <label class="form-label">Contact Number</label>
                 <input type="text" class="form-control" id="contactNo" name="contactNo" required>
               </div>
+                   
+             <div class="col-md-12 col-sm-12">
+                <label class="form-label">Email Address</label>
+                <input type="text" class="form-control" id="email" name="email" required>
+              </div>
 
                  <div class="col-md-12 col-sm-12">
                 <label class="form-label">Address</label>
                 <input type="text" class="form-control" id="address" name="address" required>
               </div>
+         
 
                 <div class="col-md-12 col-sm-12">
                 <label class="form-label">Username</label>

@@ -20,7 +20,7 @@ $(document).ready(function () {
         }, function (start, end, label) {
             // Update variables when user selects new dates
             startDate = start;
-            endDate = end;
+            endDate =  end;
             console.log("New range selected:", start.format('YYYY-MM-DD'), "to", end.format('YYYY-MM-DD'));
         });
 

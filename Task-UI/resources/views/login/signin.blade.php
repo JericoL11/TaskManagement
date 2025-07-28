@@ -21,23 +21,81 @@
 
             <div class="col-md-12 col-sm-12">
                 <label class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" required>
+                <input type="password" class="form-control" id="password_signin" required>
               </div>
 
               <div class="d-grid mt-4">
                 <button type="button" id="signIn-btn" class="btn btn-primary">Login</button>
               </div>
-                </div>
+          
+                <small class="text-center mt-2">or</small>
+
+              <div class="d-flex justify-content-center mt-2">
+              <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#verifyEmailModal">
+                  forgot password?
+              </button>
+
+              </div>
+             
+              </div>
+          
             </form>
           </div>
         </div>
-@endsection
-{{-- 
-<script>
-    const token = localStorage.getItem('auth_token');
+@endsection<!-- Button trigger modal -->
 
-    if (token) {
-        // The user is already logged in
-        window.location.href = '/dashboard'; // Redirect to dashboard
-    }
-</script> --}}
+
+{{-- send code --}}
+<div class="modal fade" id="verifyEmailModal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" data-bs-backdrop="static" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Forgot Password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+         <div class="col-lg-12 col-md-6 col-sm-12">
+            <label class="control-label">Email addresss</label>
+            <input type="text" class="form-control" id="emailAddress" placeholder="Enter email address.."/>
+          </div>
+        </div>
+      <div class="modal-footer">
+        <button id="btn-forgotPass-email" class="btn btn-primary">Verify</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{-- reset password --}}
+<div class="modal fade" id="resetPasswordModal" aria-hidden="true" data-bs-backdrop="static" aria-labelledby="exampleModalToggleLabel2" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalToggleLabel2">Change Password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+         <input type="hidden" id="verifiedEmail"/>
+
+          <div class="col-lg-12 col-md-6 col-sm-12">
+            <label class="control-label">Code</label>
+            <input type="text" class="form-control" id="code" placeholder="Enter email address.."/>
+          </div>
+
+           <div class="col-lg-12 col-md-6 col-sm-12">
+            <label class="control-label">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter email address.."/>
+          </div>
+
+           <div class="col-lg-12 col-md-6 col-sm-12">
+            <label class="control-label">Confirmed Password</label>
+            <input type="password" class="form-control" id="password_confirmation" placeholder="Enter email address.."/>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="btn-forgotPass-newPass">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>

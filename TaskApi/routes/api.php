@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
@@ -44,14 +45,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('pending/task/all', [TaskController::class, 'countAllPendingTask']);
 
 
-//departments
+    //departments
     Route::resource('departments', DepartmentController::class);
     Route::post('save/department/{id}', [DepartmentController::class, 'saveDepartment']);
 });
 
 
 
-
+Route::post('forgot-password', [PasswordController::class, 'sendCode']);
+Route::post('reset-password', [PasswordController::class, 'reset']);
 
 //auth
 Route::post('auth/register', [AuthController::class, 'createUser']);
